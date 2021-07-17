@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>top.paakciu</groupId>
-            <artifactId>pitim.protocal</artifactId>
+            <artifactId>pitim.protocol</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

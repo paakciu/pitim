@@ -1,4 +1,4 @@
-package top.paakciu.pitim;
+package top.paakciu.pitim.server;
 
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -7,13 +7,10 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import top.paakciu.pitim.constant.IMConfig;
-import top.paakciu.pitim.handler.SimpleServerHandler;
+import top.paakciu.pitim.server.handler.SimpleServerHandler;
 
 
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class NettyServer {

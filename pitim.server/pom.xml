@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pitim.service</artifactId>
+    <artifactId>pitim.server</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

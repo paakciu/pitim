@@ -1,4 +1,4 @@
-package top.paakciu.pitim.constant;
+package top.paakciu.pitim.common.constant;
 
 /**
  * @author paakciu
