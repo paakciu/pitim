@@ -9,6 +9,7 @@
         <module name="pitim.protocal" />
         <module name="pitim.client" />
         <module name="pitim.service" />
+        <module name="pitim.common" />
       </profile>
     </annotationProcessing>
   </component>

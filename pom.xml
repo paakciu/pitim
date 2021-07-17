@@ -12,6 +12,7 @@
         <module>pitim.client</module>
         <module>pitim.service</module>
         <module>pitim.protocal</module>
+        <module>pitim.common</module>
     </modules>
 
     <properties>
