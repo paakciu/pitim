@@ -1,6 +1,5 @@
 package top.paakciu.pitim.server;
 
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -15,8 +14,6 @@ import java.util.Scanner;
 
 public class NettyServer {
 
-//    public static ExecutorService executor = Executors.newFixedThreadPool(IMConfig.SERVER_THREAD_POOL_NUM);
-
     //定义后续每条连接的数据读写
     public static void setServerBootstrapChildHandler(ServerBootstrap serverBootstrap){
         //定义后续每条连接的数据读写，业务处理逻辑，这里的NioSocketChannel是netty对NIO类型连接的抽象，如Socket
@@ -24,7 +21,6 @@ public class NettyServer {
             @Override
             //每条客户端连接--
             protected void initChannel(NioSocketChannel nioSocketChannel) {
-                //System.out.println(nioSocketChannel.attr(AttributeKey.valueOf("clientKey")).get());
                 System.out.println("客户机接入");
                 //添加逻辑处理器
                 nioSocketChannel.pipeline()

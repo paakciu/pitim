@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Scanner;
@@ -20,7 +20,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
         if(Objects.isNull(str) || "".equals(str)){
             return null;
         }
-        byte[] bytes = str.getBytes(Charset.forName("utf-8"));
+        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
         ByteBuf buffer = ctx.alloc().buffer();
         buffer.writeBytes(bytes);
         return buffer;
@@ -41,9 +41,9 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg)  {
         ByteBuf byteBuf = (ByteBuf) msg;
-        System.out.println(new Date() + ": 服务端读到数据 -> " + byteBuf.toString(Charset.forName("utf-8")));
+        System.out.println(new Date() + ": 服务端读到数据 -> " + byteBuf.toString(StandardCharsets.UTF_8));
 
     }
 }
