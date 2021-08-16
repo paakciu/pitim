@@ -8,10 +8,15 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import top.paakciu.pitim.common.constant.IMConfig;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 
 public class NettyClient {
@@ -79,43 +84,43 @@ public class NettyClient {
     //建立连接
     private void connect (Bootstrap bootstrap,String host,int port,int retry)
     {
+        Map<Boolean, Consumer<Future<?>>> action=new HashMap<>();
+        action.put(false,future->{
+            //这里应该要有个随机退避算法
+            //接口处理连接失败
+            //--------------------
+            //todo,这里应当使用线程，使操作变成异步，以免阻塞欢迎连接
+            System.out.println("连接失败！正在重试");
+            //--------------------
+
+            if (retry == 0) {
+                System.err.println("重试次数已用完，放弃连接！");
+                return;
+            }
+            // 第几次重连
+            int order = (MAX_RETRY - retry) + 1;
+            // 此次重连的间隔时间
+            int delay = 1 << order;
+            System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
+            //使用计划任务来实现退避重连算法
+            bootstrap.config().group().schedule(
+                    () -> connect(bootstrap, host, port, retry - 1)
+                    ,delay
+                    ,TimeUnit.SECONDS
+            );
+        });
+        action.put(true,future->{
+            Channel channel = ((ChannelFuture) future).channel();
+            // 连接成功之后，启动控制台线程
+            //--------------------
+            //todo,这里应当使用线程，使操作变成异步，以免阻塞欢迎连接
+            System.out.println("连接成功！");
+            //--------------------
+        });
         bootstrap
                 .connect(host, port)
                 .addListener(future -> {
-                    if (!future.isSuccess()) {
-                        //这里应该要有个随机退避算法
-                        //接口处理连接失败
-                        //--------------------
-                        //todo,这里应当使用线程，使操作变成异步，以免阻塞欢迎连接
-                        System.out.println("连接失败！正在重试");
-                        //--------------------
-                        if (retry == 0) {
-                            System.err.println("重试次数已用完，放弃连接！");
-                            return;
-                        }
-                        // 第几次重连
-                        int order = (MAX_RETRY - retry) + 1;
-                        // 此次重连的间隔时间
-                        int delay = 1 << order;
-                        System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
-                        //使用计划任务来实现退避重连算法
-                        bootstrap.config().group().schedule(
-                                () -> connect(bootstrap, host, port, retry - 1)
-                                ,delay
-                                ,TimeUnit.SECONDS
-                        );
-                    }
-                    else {
-                        Channel channel = ((ChannelFuture) future).channel();
-                        // 连接成功之后，启动控制台线程
-//                        channelisOK=true;
-//                        this.channel=channel;
-                        //接口处理连接成功
-                        //--------------------
-                        //todo,这里应当使用线程，使操作变成异步，以免阻塞欢迎连接
-                        System.out.println("连接成功！");
-                        //--------------------
-                    }
+                    action.get(future.isSuccess()).accept(future);
                 });
     }
 
@@ -125,48 +130,3 @@ public class NettyClient {
     }
 
 }
-
-
-
-
-
-
-
-//    //连接成功后执行的方法，尽量新建线程去完成
-//    private static void startConsoleThread(Channel channel) {
-//        Scanner sc = new Scanner(System.in);
-//
-//        new Thread(() -> {
-//            while (!Thread.interrupted()) {
-//
-//                //Attribute<Boolean> loginAttr = channel.attr(AttributeKey.exists("login")?AttributeKey.valueOf("login"):AttributeKey.newInstance("login"));
-//                //如果没有登录
-//                if (
-//                        !AttributesHelper.hasLogin(channel)
-//                        &&(AttributesHelper.getLoginState(channel)==null
-//                        ||AttributesHelper.getLoginState(channel)==3
-//                        ||AttributesHelper.getLoginState(channel)!=0)
-//                    ) {
-//                    System.out.println("输入账号: ");
-//                    String username = sc.nextLine();
-//                    System.out.println("输入密码: ");
-//                    String password = sc.nextLine();
-//
-//                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket(username,password);
-//
-//                    AttributesHelper.setLoginState(channel, AttributesHelper.LOGINSTATE.LOGINING.getValue());
-//                    //ByteBuf byteBuf = PacketCodec.encode(channel.alloc().buffer(), packet);
-//                    channel.writeAndFlush(loginRequestPacket);
-//                }else{
-//                    System.out.println("请输入【对方id 消息】");
-//                    String toUserId = sc.next();
-//                    String message = sc.next();
-//
-//                    MessageRequestPacket packet = new MessageRequestPacket();
-//                    packet.setToUserId(toUserId);
-//                    packet.setMessage(message);
-//                    channel.writeAndFlush(packet);
-//                }
-//            }
-//        }).start();
-//    }
