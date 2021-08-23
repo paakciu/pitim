@@ -1,4 +1,4 @@
-package top.paakciu.pitim.client;
+package top.paakciu.pitim.client.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

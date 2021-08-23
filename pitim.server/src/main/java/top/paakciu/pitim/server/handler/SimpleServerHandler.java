@@ -44,6 +44,5 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)  {
         ByteBuf byteBuf = (ByteBuf) msg;
         System.out.println(new Date() + ": 服务端读到数据 -> " + byteBuf.toString(StandardCharsets.UTF_8));
-
     }
 }

@@ -9,7 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
+import top.paakciu.pitim.client.handler.SimpleClientHandler;
 import top.paakciu.pitim.common.constant.IMConfig;
 
 import java.util.Date;
